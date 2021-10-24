@@ -1,0 +1,22 @@
+.grid-container {
+	display: flex;
+	/*justify-content: center;*/
+	 /*grid-column-gap: 50px;*/
+}
+
+li{
+	cursor: pointer;
+	list-style: none;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+
+.active{
+	background: #000;
+	color: #fff;
+}
+
+
+video::-webkit-media-controls-panel {
+  /*background-image: linear-gradient(transparent, transparent) !important;*/
+}
