@@ -58,7 +58,7 @@ function App() {
 
         <div className="grid-item">
           <h3>Playing: {current}</h3>
-          <video width="840" height="480" controls></video>
+          <video width="100%" controls></video>
         </div>
 
         <div className="grid-item file-list">
