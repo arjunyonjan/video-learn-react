@@ -6,10 +6,10 @@ import './App.css';
 function App() {
 
   const [items, setItems] = useState([])
-  const [dir, setDir] = useState(`COURSES`)
+  const [dir, setDir] = useState( localStorage.getItem('dir') ||`COURSES`)
   const [current, setCurrent] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [drive,setDrive] = useState('E:')
+  const [drive,setDrive] = useState(localStorage.getItem('drive') || 'E:')
  
   async function fetchData(){
 
@@ -30,7 +30,7 @@ function App() {
     const video = document.querySelector('video')
     setCurrent(item)
     setCurrentIndex(index)
-    const src = `${host}/${dir}/${item}`
+    const src = `${host}/${dir}/${encodeURIComponent(item)}`
     video.src = src
     video.playbackRate = 1.5
     video.play()
@@ -38,20 +38,12 @@ function App() {
 
   const handleDriveChange= (e)=>{
     setDrive(e.target.value)
+    localStorage.setItem('drive',e.target.value)
   }
 
   const handleFolderChange = (e)=>{
     setDir(e.target.value)
-  }
-
-  const handleClick = (index,item)=>{
-
-    console.log("clicke.d...", "$$$$");
-
-    setDir(`${dir}\\${item}`)
-console.log(dir, "------------$$$$");
-    // fetchData()
-
+    localStorage.setItem('dir',e.target.value)
   }
 
   return (
@@ -69,13 +61,15 @@ console.log(dir, "------------$$$$");
           <video width="840" height="480" controls></video>
         </div>
 
-        <div className="grid-item">
+        <div className="grid-item file-list">
 
-          <h1>{dir}</h1>
+          <h3>{dir}</h3>
 
           <ul>
             {items.map((item, index)=>{
-              return (<li key={item} className={currentIndex===index? 'active':''} onClick={()=>handleVideo(index, item)}>{item}</li>)
+              return (<li key={item} className={currentIndex===index? 'active':''} onClick={()=>handleVideo(index, item)}>
+                 <p>{item.match('.mp4') ? <img src='play-button.svg' width="30" alt="play" /> : null}{item}</p>
+              </li>)
             })}
           </ul>
         </div>

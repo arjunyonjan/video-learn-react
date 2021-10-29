@@ -8,7 +8,18 @@ li{
 	cursor: pointer;
 	list-style: none;
 	margin-bottom: 20px;
-	padding: 10px;
+	padding: 5px 5px;
+	position: relative;
+}
+
+p{
+	margin:0;padding:0;
+}
+
+li img{
+	position: absolute;
+	margin-top: -2px;
+	left: -40px;
 }
 
 .active{
@@ -16,7 +27,15 @@ li{
 	color: #fff;
 }
 
+.grid-item{
+	padding: 0 2em;
+}
 
 video::-webkit-media-controls-panel {
   /*background-image: linear-gradient(transparent, transparent) !important;*/
+}
+
+.file-list{
+	overflow-y: scroll;
+	height:  calc(100vh - 50px);
 }
