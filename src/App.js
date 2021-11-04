@@ -9,14 +9,14 @@ function App() {
   const [dir, setDir] = useState( localStorage.getItem('dir') ||`COURSES`)
   const [current, setCurrent] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [drive,setDrive] = useState(localStorage.getItem('drive') || 'E:')
+  // const [drive,setDrive] = useState(localStorage.getItem('drive') || 'E:')
  
   async function fetchData(){
 
       // const urlSearchParams = new URLSearchParams(window.location.search);
       // const params = Object.fromEntries(urlSearchParams.entries());
       const res = await axios({
-        url: `http://localhost:3001/?folder=${dir}&drive=${drive}`
+        url: `http://localhost:3001/?folder=${dir}`
       })
       setItems(res.data.files)
     }
@@ -43,11 +43,11 @@ function App() {
       localStorage.setItem('playbackRate', video.playbackRate)
     }
   }
-
+/*
   const handleDriveChange= (e)=>{
     setDrive(e.target.value)
     localStorage.setItem('drive',e.target.value)
-  }
+  }*/
 
   const handleFolderChange = (e)=>{
     setDir(e.target.value)
@@ -67,7 +67,7 @@ function App() {
   return (
     <>
       <div className="">
-        <label>Drive</label> <input value={drive}  onChange={(e)=>handleDriveChange(e)} type="text" />
+        {/*<label>Drive</label> <input value={drive}  onChange={(e)=>handleDriveChange(e)} type="text" />*/}
         <label>Folder</label><input value={dir} onChange={(e)=>handleFolderChange(e)} type="text" />
         <button className="btn btn-sm" onClick={fetchData}>GET</button>
       </div>
