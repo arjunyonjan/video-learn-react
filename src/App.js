@@ -30,7 +30,10 @@ function App() {
     const video = document.querySelector('video')
     setCurrent(item)
     setCurrentIndex(index)
-    const src = `${host}/${dir}/${encodeURIComponent(item)}`
+
+    const newDir = dir.replace(/^.:\\/,"")
+
+    const src = `${host}/${newDir}/${encodeURIComponent(item)}`
     video.src = src
     video.playbackRate = 1.5
     video.play()
