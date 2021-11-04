@@ -35,8 +35,13 @@ function App() {
 
     const src = `${host}/${newDir}/${encodeURIComponent(item)}`
     video.src = src
-    video.playbackRate = 1.5
+    video.playbackRate = localStorage.getItem('playbackRate') || 1.5
     video.play()
+
+
+    video.onratechange = (e)=>{
+      localStorage.setItem('playbackRate', video.playbackRate)
+    }
   }
 
   const handleDriveChange= (e)=>{
@@ -47,6 +52,16 @@ function App() {
   const handleFolderChange = (e)=>{
     setDir(e.target.value)
     localStorage.setItem('dir',e.target.value)
+  }
+
+  const changePlaybackRate = (type)=>{
+    const video = document.querySelector('video')
+
+    if(type==="reset"){video.playbackRate = 1; return}
+
+    if(type==="increase"){video.playbackRate = video.playbackRate + 0.25; return}
+
+    video.playbackRate = video.playbackRate - 0.25
   }
 
   return (
@@ -62,6 +77,10 @@ function App() {
         <div className="grid-item">
           <h3>Playing: {current}</h3>
           <video width="100%" controls></video>
+
+          <button onClick={()=>changePlaybackRate('decrease')}>- .25x</button>
+          <button onClick={()=>changePlaybackRate('increase')}>+ .25x</button>
+          <button onClick={()=>changePlaybackRate('reset')}>1x</button>
         </div>
 
         <div className="grid-item file-list">
