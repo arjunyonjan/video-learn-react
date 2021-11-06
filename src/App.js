@@ -6,20 +6,18 @@ import './App.css';
 function App() {
 
   const [items, setItems] = useState([])
-  const [dir, setDir] = useState( localStorage.getItem('dir') ||`COURSES`)
+  const [dir, setDir] = useState( localStorage.getItem('dir') ||`D:\\COURSES`)
   const [current, setCurrent] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   // const [drive,setDrive] = useState(localStorage.getItem('drive') || 'E:')
+  // const [currentDirKey, setCurrentDirKey] = useState(0)
  
-  async function fetchData(){
-
-      // const urlSearchParams = new URLSearchParams(window.location.search);
-      // const params = Object.fromEntries(urlSearchParams.entries());
-      const res = await axios({
-        url: `http://localhost:3001/?folder=${dir}`
-      })
-      setItems(res.data.files)
-    }
+  async function fetchData(path){
+    const res = await axios({
+      url: `http://localhost:3001/?folder=${path}`
+    })
+    setItems(res.data.files)
+  }
 
   useEffect(()=>{
     // fetchData()   
@@ -43,11 +41,7 @@ function App() {
       localStorage.setItem('playbackRate', video.playbackRate)
     }
   }
-/*
-  const handleDriveChange= (e)=>{
-    setDrive(e.target.value)
-    localStorage.setItem('drive',e.target.value)
-  }*/
+
 
   const handleFolderChange = (e)=>{
     setDir(e.target.value)
@@ -64,12 +58,68 @@ function App() {
     video.playbackRate = video.playbackRate - 0.25
   }
 
+
+  const getDir = ()=>{
+
+    let paths = dir.replace(/\\$/,"").split("\\")
+    return paths.map((path, index)=>{
+      return (<span key={index} onClick={()=>{generateNewPath(index, paths)}} className="dir__name">{path}\</span>)
+    })
+  }
+
+  // D:\COURSES\100 Days Python 2021\01. Day 1 - Beginner - Working with Variables in Python to Manage Data\
+  const generateNewPath = (key, paths)=>{
+
+    let currentKey = key
+
+    let newPath = "";
+    for (const key in paths) {
+      if (key < currentKey+1) {
+        newPath += paths[key] + "\\";
+      }
+    }
+
+    setDir(newPath)
+    fetchData(newPath)
+  }
+
+  const handleFolder = (item)=>{
+
+    if(item.match(".html") || item.match(".srt")) {return}
+
+    let newPath = dir+item
+    setDir(newPath)
+    fetchData(newPath)
+  }
+
+  const handleBack = ()=>{
+
+    const dir2 = dir.replace(/\\$/,"")
+
+    let paths = dir2.split("\\")
+    let currentKey = paths.length-1
+
+
+    let newPath = "";
+    for (const key in paths) {
+      if (key < currentKey) {
+        newPath += paths[key] + "\\";
+      }
+    }
+
+    setDir(newPath)
+
+    fetchData(newPath)
+
+  }
+
+
   return (
     <>
       <div className="">
         {/*<label>Drive</label> <input value={drive}  onChange={(e)=>handleDriveChange(e)} type="text" />*/}
         <label>Folder</label><input value={dir} onChange={(e)=>handleFolderChange(e)} type="text" />
-        <button className="btn btn-sm" onClick={fetchData}>GET</button>
+        <button className="btn btn-sm" onClick={()=>fetchData(dir)}>GET</button>
       </div>
     
       <div className="App grid-container">
@@ -83,14 +133,16 @@ function App() {
           <button onClick={()=>changePlaybackRate('reset')}>1x</button>
         </div>
 
-        <div className="grid-item file-list">
+        <div className="grid-item">
 
-          <h3>{dir}</h3>
+          <h3><button onClick={()=>handleBack()}> &uarr; </button> {getDir()}</h3>
 
-          <ul>
+          <ul className="file-list">
             {items.map((item, index)=>{
-              return (<li key={item} className={currentIndex===index? 'active':''} onClick={()=>handleVideo(index, item)}>
-                 <p>{item.match('.mp4') ? <img src='play-button.svg' width="30" alt="play" /> : null}{item}</p>
+              return (<li key={item} className={currentIndex===index? 'active':''}>
+                {item.match('.mp4') ? <p onClick={()=>handleVideo(index, item)}><img src='play-button.svg' width="30" alt="play" /> {item}</p> :
+                  <p onClick={()=>handleFolder(item)}>{item}</p>
+                }                 
               </li>)
             })}
           </ul>

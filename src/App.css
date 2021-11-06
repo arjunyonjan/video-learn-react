@@ -5,11 +5,15 @@
 }
 
 li{
-	cursor: pointer;
 	list-style: none;
 	margin-bottom: 20px;
 	padding: 5px 5px;
 	position: relative;
+}
+
+li:hover{
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 p{
@@ -46,5 +50,10 @@ video::-webkit-media-controls-panel {
 
 .file-list{
 	overflow-y: scroll;
-	height:  calc(100vh - 50px);
+	height:  calc(100vh - 200px);
+}
+
+.dir__name:hover{
+	cursor: pointer;
+	text-decoration: underline;
 }
