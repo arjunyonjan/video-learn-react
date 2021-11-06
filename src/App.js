@@ -13,8 +13,9 @@ function App() {
   // const [currentDirKey, setCurrentDirKey] = useState(0)
  
   async function fetchData(path){
+    console.log(path, "path------$$$$");
     const res = await axios({
-      url: `http://localhost:3001/?folder=${path}`
+      url: `http://localhost:3001/?folder=${encodeURIComponent(path)}`
     })
     setItems(res.data.files)
   }
@@ -80,6 +81,7 @@ function App() {
     }
 
     setDir(newPath)
+    localStorage.setItem('dir',newPath)
     fetchData(newPath)
   }
 
@@ -89,6 +91,7 @@ function App() {
 
     let newPath = dir+item
     setDir(newPath)
+    localStorage.setItem('dir',newPath)
     fetchData(newPath)
   }
 
@@ -108,9 +111,8 @@ function App() {
     }
 
     setDir(newPath)
-
+    localStorage.setItem('dir',newPath)
     fetchData(newPath)
-
   }
 
 
